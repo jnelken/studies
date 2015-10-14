@@ -36,6 +36,13 @@ class ShortenedUrl < ActiveRecord::Base
     source: :visitor
   )
 
+  has_many(
+    :distinct_visitors,
+    -> { distinct },
+    through: :visits,
+    source: :visitor
+  )
+
   def self.random_code
     random_code = SecureRandom.urlsafe_base64(16)
     while ShortenedUrl.exists?(random_code)
@@ -58,6 +65,11 @@ class ShortenedUrl < ActiveRecord::Base
   end
 
   def num_uniques
-    visitors.distinct.count
+    distinct_visitors.count
+  end
+
+  def num_recent_uniques
+    visits.where("created_at > ?", 10.minutes.ago)
+      .select(:visitor_id).distinct.count
   end
 end

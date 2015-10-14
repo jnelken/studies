@@ -1,0 +1,16 @@
+def get_email
+  puts "Input your email:"
+  gets.chomp
+end
+
+def get_action
+  puts "What do you want to do?"
+  puts "0. Create shortened URL"
+  puts "1. Visit shortened URL"
+  gets.chomp
+end
+
+def get_long_url
+  puts "Type in your long url:"
+  gets.chomp
+end
