@@ -12,9 +12,10 @@
 require 'securerandom'
 
 class ShortenedUrl < ActiveRecord::Base
-  validates :submitter_id, presence: true
+  validates :submitter_id, presence: true,
+  #validate :only_five_per_min
   validates :short_url, presence: true, uniqueness: true
-  validates :long_url, presence: true
+  validates :long_url, presence: true, length: { maximum: 255 }
 
   belongs_to(
     :submitter,
@@ -41,6 +42,19 @@ class ShortenedUrl < ActiveRecord::Base
     -> { distinct },
     through: :visits,
     source: :visitor
+  )
+
+  has_many(
+    :taggings,
+    class_name: "Tagging",
+    foreign_key: :shortened_url_id,
+    primary_key: :id
+  )
+
+  has_many(
+    :tag_topics,
+    through: :taggings,
+    source: :tag_topic
   )
 
   def self.random_code
@@ -72,4 +86,12 @@ class ShortenedUrl < ActiveRecord::Base
     visits.where("created_at > ?", 10.minutes.ago)
       .select(:visitor_id).distinct.count
   end
+
+  # private
+
+  # def only_five_per_min
+  #   if you meet some bad condition
+  #     errors.add(:submitter_id, "has created too many short urls in the past minute")
+  #   end
+  # end
 end

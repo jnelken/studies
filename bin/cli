@@ -30,6 +30,8 @@ def visit_shortened_url(user)
     :first, conditions: ["short_url = ?", get_shortened_url])
 
   Visit.record_visit!(user, short_url)
+
+  Launchy.open(short_url.long_url)
 end
 
 def main
