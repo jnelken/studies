@@ -7,6 +7,13 @@ $.FollowToggle = function (el) {
 };
 
 $.FollowToggle.prototype.render = function () {
+  if (this.followState === "following" ||
+  this.followState === "unfollowing") {
+    this.$el.prop("disabled", true);
+  }else{
+    this.$el.prop("disabled", false);
+  }
+
   var buttonText = "";
   if (this.followState == "unfollowed") {
     buttonText = "Follow!";
@@ -27,9 +34,13 @@ $.FollowToggle.prototype.handleClick = function (e) {
   var path = "/users/" + this.userId + "/follow";
   if (this.followState === "followed") {
     method = "DELETE";
+    this.followState = "unfollowing";
   } else {
     method = "POST";
+    this.followState = "following";
   }
+
+  this.render();
 
   $.ajax({
     url: path,
@@ -39,7 +50,7 @@ $.FollowToggle.prototype.handleClick = function (e) {
       "user_id": this.user_id
     },
     success: function (data) {
-      this.followState = (this.followState === "followed") ? "unfollowed" : "followed";
+      this.followState = (this.followState === "unfollowing") ? "unfollowed" : "followed";
       this.$el.data("initial-follow-state", this.followState);
       this.render();
     }.bind(this)
