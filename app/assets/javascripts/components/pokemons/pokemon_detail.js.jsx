@@ -39,7 +39,6 @@ var PokemonDetail = React.createClass({
             <li>Defense: {this.state.pokemon.defense}</li>
             <li>Moves: {this.state.pokemon.moves}</li>
           </ul>
-
         </div>;
     } else {
       content = <div></div>;
