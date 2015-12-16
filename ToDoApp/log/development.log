@@ -389,3 +389,16 @@ Started GET "/api/todos" for ::1 at 2015-12-15 16:10:16 -0500
 Processing by Api::TodosController#index as JSON
   [1m[36mTodo Load (0.3ms)[0m  [1mSELECT "todos".* FROM "todos"[0m
 Completed 200 OK in 2ms (Views: 0.1ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/" for ::1 at 2015-12-15 22:36:24 -0500
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Processing by StaticPagesController#root as HTML
+  Rendered static_pages/root.html.erb within layouts/application (1.3ms)
+Completed 200 OK in 241ms (Views: 234.1ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/api/todos" for ::1 at 2015-12-15 22:36:25 -0500
+Processing by Api::TodosController#index as JSON
+  [1m[35mTodo Load (0.6ms)[0m  SELECT "todos".* FROM "todos"
+Completed 200 OK in 16ms (Views: 0.1ms | ActiveRecord: 2.7ms)
