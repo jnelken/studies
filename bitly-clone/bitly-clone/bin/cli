@@ -1,0 +1,52 @@
+def get_email
+  puts "Input your email:"
+  gets.chomp
+end
+
+def get_action
+  puts "What do you want to do?"
+  puts "0. Create shortened URL"
+  puts "1. Visit shortened URL"
+  gets.chomp
+end
+
+def get_long_url
+  puts "Type in your long url:"
+  gets.chomp
+end
+
+def get_shortened_url
+  puts "Type in the shortened URL:"
+  gets.chomp
+end
+
+def create_shortened_url(user)
+  long_url = get_long_url
+  ShortenedUrl.create_for_user_and_long_url!(user, long_url)
+end
+
+def visit_shortened_url(user)
+  short_url = ShortenedUrl.find(
+    :first, conditions: ["short_url = ?", get_shortened_url])
+
+  Visit.record_visit!(user, short_url)
+
+  Launchy.open(short_url.long_url)
+end
+
+def main
+  user = User.find(:first, conditions: ["email = ?", get_email])
+  case get_action
+  when "0"
+    shortened_url = create_shortened_url(user)
+    puts "Short url is: #{shortened_url.short_url}"
+  when "1"
+    visit_shortened_url(user)
+  else
+    main
+  end
+end
+
+if __FILE__ == $0
+  main
+end
